@@ -29,14 +29,15 @@ namespace Resilient.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddHttpClient<GithubClient>(client => 
-                    {
-                        client.BaseAddress = new Uri("https://api.github.com/");
-                        client.DefaultRequestHeaders.Add("User-Agent", "resilient-api");
-                        client.DefaultRequestHeaders.Add("Accept", "application/json");
-                    })
+
+            services.AddHttpClient<JsonPlaceHolderClient>(client =>
+                     {
+                         client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com/");
+                         client.DefaultRequestHeaders.Add("User-Agent", "resilient-api");
+                         client.DefaultRequestHeaders.Add("Accept", "application/json");
+                     })
                     .AddTransientHttpErrorPolicy(policy => policy.RetryAsync(3))
-                    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)))                    
+                    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)))
                     .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(30));
         }
 
