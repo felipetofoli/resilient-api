@@ -36,6 +36,14 @@ namespace Resilient.WebApi
                     })
                     .AddTransientHttpErrorPolicy(policy => policy.RetryAsync(3))
                     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<JsonPlaceHolderClient>(client =>
+            {
+                client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com/");
+                client.DefaultRequestHeaders.Add("User-Agent", "resilient-api");
+            })
+                   .AddTransientHttpErrorPolicy(policy => policy.RetryAsync(3))
+                   .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
