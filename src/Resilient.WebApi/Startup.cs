@@ -61,16 +61,6 @@ namespace Resilient.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Posts API V1");
             });
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
