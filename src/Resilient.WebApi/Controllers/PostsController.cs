@@ -12,18 +12,18 @@ namespace Resilient.WebApi.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly JsonPlaceHolderClient jsonPlaceHolderClient;
+        private readonly PostClient postClient;
 
-        public PostsController(JsonPlaceHolderClient jsonPlaceHolderClient)
+        public PostsController(PostClient jsonPlaceHolderClient)
         {
-            this.jsonPlaceHolderClient = jsonPlaceHolderClient;
+            this.postClient = jsonPlaceHolderClient;
         }
 
         // GET api/values
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var repositories = await jsonPlaceHolderClient.GetRepositories();
+            var repositories = await postClient.GetPosts();
             return Ok(repositories);
         }
 
@@ -31,7 +31,7 @@ namespace Resilient.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var post = await jsonPlaceHolderClient.GetPost(id);
+            var post = await postClient.GetPost(id);
             return Ok(post);
         }
 
@@ -39,8 +39,7 @@ namespace Resilient.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostModel value)
         {
-            await jsonPlaceHolderClient.BlogPost(value);
-
+            await postClient.BlogPost(value);
             return Ok();
         }
     }

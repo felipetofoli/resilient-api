@@ -30,7 +30,7 @@ namespace Resilient.WebApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddHttpClient<JsonPlaceHolderClient>(client =>
+            services.AddHttpClient<PostClient>(client =>
                      {
                          client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com/");
                          client.DefaultRequestHeaders.Add("User-Agent", "resilient-api");

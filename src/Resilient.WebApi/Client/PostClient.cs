@@ -8,24 +8,24 @@ using System.Threading.Tasks;
 
 namespace Resilient.WebApi.Client
 {
-    public class JsonPlaceHolderClient
+    public class PostClient
     {
         private HttpClient _client;
 
-        public JsonPlaceHolderClient(HttpClient client)
+        public PostClient(HttpClient client)
         {
             _client = client;
         }
 
-        public async Task<IEnumerable<PostModel>> GetRepositories()
+        public async Task<IEnumerable<PostModel>> GetPosts()
         {
-            var response = await _client.GetAsync("http://jsonplaceholder.typicode.com/posts");
+            var response = await _client.GetAsync("/posts");
             return await response.Content.ReadAsAsync<IEnumerable<PostModel>>();
         }
 
         public async Task<PostModel> GetPost(int id)
         {
-            var response = await _client.GetAsync("$http://jsonplaceholder.typicode.com/posts/{id}");
+            var response = await _client.GetAsync($"/posts/{id}");
             return await response.Content.ReadAsAsync<PostModel>();
         }
 
@@ -33,7 +33,7 @@ namespace Resilient.WebApi.Client
         {
             var content = new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
 
-            await _client.PostAsync("http://jsonplaceholder.typicode.com/posts", content);
+            await _client.PostAsync("/posts", content);
         }
     }
 }
