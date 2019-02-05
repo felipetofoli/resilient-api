@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resilient.WebApi.Client;
 using Polly;
-
+using System.Net.Http;
 
 namespace Resilient.WebApi
 {
@@ -28,14 +28,16 @@ namespace Resilient.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpClient<GithubClient>(client => 
                     {
                         client.BaseAddress = new Uri("https://api.github.com/");
                         client.DefaultRequestHeaders.Add("User-Agent", "resilient-api");
+                        client.DefaultRequestHeaders.Add("Accept", "application/json");
                     })
                     .AddTransientHttpErrorPolicy(policy => policy.RetryAsync(3))
-                    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+                    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)))                    
+                    .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(30));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
