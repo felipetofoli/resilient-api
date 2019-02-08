@@ -9,7 +9,7 @@ namespace Resilient.WebApi.Client
 {
     public class PostClient
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public PostClient(HttpClient client)
         {
@@ -31,7 +31,6 @@ namespace Resilient.WebApi.Client
         public async Task BlogPost(PostModel value)
         {
             var content = new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
-
             await _client.PostAsync("/posts", content);
         }
     }
